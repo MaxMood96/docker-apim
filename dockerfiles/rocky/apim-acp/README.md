@@ -1,6 +1,6 @@
 # Dockerfile for WSO2 API Manager - API Control Plane #
 
-This section defines the step-by-step instructions to build an [Rocky Linux](https://hub.docker.com/_/rockylinux/) based Docker image for WSO2 API Manager 4.6.0.
+This section defines the step-by-step instructions to build a [Rocky Linux](https://hub.docker.com/_/rockylinux/) based Docker image for WSO2 API Manager 4.7.0.
 
 ## Prerequisites
 
@@ -20,13 +20,11 @@ git clone https://github.com/wso2/docker-apim.git
 
 #### 2. Build the Docker image.
 
-- Download wso2am-acp-4.6.0.zip from [here](https://wso2.com/api-management/install/)
-- Host the product pack using a webserver.
 - Navigate to `<AM_DOCKERFILE_HOME>` directory. <br>
 - Execute `docker build` command as shown below.
 
 ```
-docker build -t wso2am-acp:4.6.0-rocky .
+docker build -t wso2am-acp:4.7.0-rocky .
 ```
 
 > By default, the Docker image will prepackage the General Availability (GA) release version of the relevant WSO2 product.
@@ -34,7 +32,7 @@ docker build -t wso2am-acp:4.6.0-rocky .
 #### 3. Running the Docker image.
 
 ```
-docker run -it -p 9443:9443 -p 9611:9611 -p 9711:9711 -p 5672:5672 wso2am-acp:4.6.0-rocky
+docker run -it -p 9443:9443 -p 9611:9611 -p 9711:9711 -p 5672:5672 wso2am-acp:4.7.0-rocky
 ```
 
 > Here, only port 9443 (HTTPS servlet transport) and ports 9611, 9711, 5672 have been mapped to Docker host ports.
@@ -54,7 +52,7 @@ As an example, steps required to change the port offset using `deployment.toml` 
 
 #### 1. Stop the API Manager container if it's already running.
 
-In WSO2 API Manager version 4.6.0 product distribution, `deployment.toml` configuration file <br>
+In WSO2 API Manager version 4.7.0 product distribution, `deployment.toml` configuration file <br>
 can be found at `<DISTRIBUTION_HOME>/repository/conf`. Copy the file to some suitable location of the host machine, <br>
 referred to as `<SOURCE_CONFIGS>/deployment.toml` and change the offset value (`[server]->offset`) to 1.
 
@@ -70,14 +68,14 @@ chmod o+r <SOURCE_CONFIGS>/deployment.toml
 docker run -it \
 -p 9444:9444 \
 --volume <SOURCE_CONFIGS>/deployment.toml:<TARGET_CONFIGS>/deployment.toml \
-wso2am-acp:4.6.0-rocky
+wso2am-acp:4.7.0-rocky
 ```
 
-> In here, <TARGET_CONFIGS> refers to /home/wso2carbon/wso2am-acp-4.6.0/repository/conf folder of the container.
+> In here, <TARGET_CONFIGS> refers to /home/wso2carbon/wso2am-acp-4.7.0-m1/repository/conf folder of the container.
 
-## How to build a Docker image with multi architecture support
+## How to build a Docker image with multi-architecture support
 
-The above wso2am-acp:4.6.0-rocky image will only be supported for the CPU architecture of your current machine. Docker buildx plugin can be used to build wso2am-acp:4.6.0-rocky image to support any CPU architecture.
+The above wso2am-acp:4.7.0-rocky image will only be supported for the CPU architecture of your current machine. Docker buildx plugin can be used to build wso2am-acp:4.7.0-rocky image to support any CPU architecture.
 
 #### 1. Install [Docker Buildx](https://docs.docker.com/buildx/working-with-buildx/)
 
@@ -99,7 +97,7 @@ docker buildx inspect --bootstrap
 #### 4. Build and push 
 
 ```
-docker buildx build --platform linux/amd64,linux/arm64 -t <DOCKER_USERNAME>/wso2am-acp:4.6.0-rocky --push .
+docker buildx build --platform linux/amd64,linux/arm64 --load -t <DOCKER_USERNAME>/wso2am-acp:4.7.0-rocky --push .
 ```
 
 > - Here <DOCKER_USERNAME> is a valid Docker or Dockerhub username.
@@ -110,7 +108,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t <DOCKER_USERNAME>/wso2
 
 #### 5. Run
 ```
-docker run -it -p 9443:9443 -p 8243:8243 <DOCKER_USERNAME>/wso2am-acp:4.6.0-rocky
+docker run -it -p 9443:9443 -p 8243:8243 <DOCKER_USERNAME>/wso2am-acp:4.7.0-rocky
 ```
 > Docker will pull the suitable image for the architecture and run
 
@@ -126,5 +124,5 @@ If you have a valid WSO2 subscription you can have access to WSO2 private Docker
 * [Docker build command reference](https://docs.docker.com/engine/reference/commandline/build/)
 * [Docker run command reference](https://docs.docker.com/engine/reference/run/)
 * [Dockerfile reference](https://docs.docker.com/engine/reference/builder/)
-* [Docker multi architecture build reference](https://docs.docker.com/desktop/multi-arch/)
+* [Docker multi-architecture build reference](https://docs.docker.com/desktop/multi-arch/)
 * [Docker buildx reference](https://docs.docker.com/buildx/working-with-buildx/)
